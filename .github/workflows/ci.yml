@@ -53,10 +53,10 @@ jobs:
         run: |
           aws eks update-kubeconfig --region ap-south-1 --name node-ci-cd-cluster
       
-      - name: Deploy to EKS
+      - name: Deploy with Helm
         run: |
-          kubectl apply -f K8s/deployment.yaml
-          kubectl apply -f K8s/service.yaml
+          helm upgrade --install node-app ./node-app \
+            --set image.tag=${{ github.sha }}
       
       - name: Restart Deployment
         run: kubectl rollout restart deployment node-app
